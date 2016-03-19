@@ -15,6 +15,8 @@ gem 'dm-validations'
 gem 'dm-aggregates'
 gem 'dm-migrations'
 
+gem 'github_api'
+
 gem 'slim'
 
 group :development do
@@ -24,4 +26,7 @@ end
 group :test do
   gem 'rspec', :require => 'spec'
   gem 'rack-test'
+
+  gem 'vcr'
+  gem 'webmock'
 end

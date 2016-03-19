@@ -4,7 +4,7 @@ describe 'main application' do
   include Rack::Test::Methods
 
   def app
-    Githuber.new
+    App.new
   end
 
   it 'shows the default index page' do

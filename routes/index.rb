@@ -1,5 +1,5 @@
 module Sinatra
-  module Githuber
+  module App
     module Routing
       module Index
 

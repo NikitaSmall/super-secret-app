@@ -7,7 +7,7 @@ require File.join(File.dirname(__FILE__), "environment")
 require File.join(File.dirname(__FILE__), "routes/index")
 
 
-class Githuber < Sinatra::Base
+class App < Sinatra::Base
   configure do
     set :views, "#{File.dirname(__FILE__)}/views"
     set :show_exceptions, :after_handler
@@ -23,5 +23,5 @@ class Githuber < Sinatra::Base
   end
 
   # registered routes
-  register Sinatra::Githuber::Routing::Index
+  register Sinatra::App::Routing::Index
 end
