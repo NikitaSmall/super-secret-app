@@ -21,6 +21,7 @@ Mongoid.load!(File.join(File.dirname(__FILE__), "../db/mongoid.yml"), :test)
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/vcr_cassettes'
   c.hook_into :webmock
+  c.default_cassette_options = { record: :new_episodes }
 end
 
 RSpec.configure do |config|

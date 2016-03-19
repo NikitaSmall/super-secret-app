@@ -24,6 +24,10 @@ class Githuber
     @repos ||= get_repos
   end
 
+  def query
+    @query ||= "created:#{date_range}"
+  end
+
   private
   def get_repos
     return cached_repos if cached_repos
@@ -39,10 +43,6 @@ class Githuber
   def save_repos(raw_result)
     RepoRawResult.create(result: raw_result, original_query: query)
     raw_result
-  end
-
-  def query
-    @query ||= "created:#{date_range}"
   end
 
   def date_range

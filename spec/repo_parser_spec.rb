@@ -1,0 +1,62 @@
+require "#{File.dirname(__FILE__)}/spec_helper"
+
+describe RepoParser do
+  before(:each) do
+    @client = Githuber.new
+  end
+
+  it 'returns array of hashes' do
+    VCR.use_cassette('parse_result') do
+      @parser = RepoParser.new(@client.query, @client.repos)
+      repos = @parser.parse
+
+      expect(repos).to be_a(Array)
+      expect(repos.first).to be_a(Hash)
+    end
+  end
+
+  it 'prevents to rerun parsing with same query' do
+    VCR.use_cassette('parse_result') do
+      @parser = RepoParser.new(@client.query, @client.repos)
+      repos_one = @parser.parse
+      repos_two = @parser.parse
+
+      expect(repos_one).to eq(repos_two)
+    end
+  end
+
+  it 'stores cached repos to database' do
+    VCR.use_cassette('parse_result') do
+      @parser = RepoParser.new(@client.query, @client.repos)
+      repos_one = @parser.parse
+
+      expect(Repo.count).to_not be_zero
+    end
+  end
+
+  it 'prevents to double records to database' do
+    VCR.use_cassette('parse_result') do
+      parser_one = RepoParser.new(@client.query, @client.repos)
+      parser_two = RepoParser.new(@client.query, @client.repos)
+
+      parser_one.parse
+      records_count = Repo.count
+      parser_two.parse
+
+      expect(records_count).to eq(Repo.count)
+    end
+  end
+
+  it 'stores cached repos as array of hashes' do
+    VCR.use_cassette('parse_result') do
+      parser_one = RepoParser.new(@client.query, @client.repos)
+      parser_two = RepoParser.new(@client.query, @client.repos)
+
+      parser_one.parse
+      repos = parser_two.parse
+
+      expect(repos).to be_a(Array)
+      expect(repos.first).to be_a(Hash)
+    end
+  end
+end
