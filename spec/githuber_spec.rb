@@ -31,4 +31,14 @@ describe Githuber do
       expect(saved_result.result).to eq(client_result)
     end
   end
+
+  it 'prevents to make few requests and store them in database' do
+    VCR.use_cassette('few_requests_check') do
+      first_result = Githuber.new.repos
+      second_result = Githuber.new.repos
+
+      expect(RepoRawResult.count).to eq(1)
+      expect(first_result).to eq(second_result)
+    end
+  end
 end

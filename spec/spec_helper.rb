@@ -24,6 +24,7 @@ VCR.configure do |c|
 end
 
 RSpec.configure do |config|
-  # reset database before each example is run
-  Mongoid::Config.purge!
+  config.before(:each) do
+    Mongoid::Config.purge!
+  end
 end

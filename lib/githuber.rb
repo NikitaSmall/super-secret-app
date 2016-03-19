@@ -26,19 +26,19 @@ class Githuber
 
   private
   def get_repos
-    raw_result = filter_data @client.search.repos(q: query)
-    RepoRawResult.create(result: raw_result, original_query: query)
+    return cached_repos if cached_repos
 
-    raw_result
+    raw_result = filter_data @client.search.repos(q: query)
+    save_repos(raw_result)
   end
 
-  # we need to filted data due to save space and remove a lot of unused information
-  def filter_data(data)
-    hash_data = data.body.to_h
+  def cached_repos
+    @cache ||= RepoRawResult.where(original_query: query).pluck("result").first
+  end
 
-    hash_data["items"].each do |repo|
-      UNUSED_KEYS.each { |unused_key| repo.delete(unused_key) }
-    end.first(500) # I need to trunkate results to store them on free Heroku
+  def save_repos(raw_result)
+    RepoRawResult.create(result: raw_result, original_query: query)
+    raw_result
   end
 
   def query
@@ -48,5 +48,14 @@ class Githuber
   def date_range
     range = (@mode == :weekly) ? 7 : 30
     "#{range.days.ago.strftime('%Y-%m-%d')}..#{Date.today.strftime('%Y-%m-%d')}"
+  end
+
+  # we need to filter data due to save space and remove a lot of unused information
+  def filter_data(data)
+    hash_data = data.body.to_h
+
+    hash_data["items"].each do |repo|
+      UNUSED_KEYS.each { |unused_key| repo.delete(unused_key) }
+    end.first(500) # I need to trunkate results to store them on free Heroku
   end
 end
