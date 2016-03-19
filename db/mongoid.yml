@@ -1,0 +1,13 @@
+development:
+  clients:
+    default:
+      database: githuber
+      hosts:
+        - localhost:27017
+
+test:
+  clients:
+    default:
+      database: githuberTest
+      hosts:
+        - localhost:27017

@@ -1,16 +1,10 @@
 # this model stores raw result from the api. We can use it for future purposes
 # and as a catch system.
-class RawResult
-  include DataMapper::Resource
+class RepoRawResult
+  include Mongoid::Document
 
-  property :id,             Serial
+  field :original_query, type: String
+  field :result,         type: Array
 
-  property :original_query, String
-  property :result,         String
-
-  # these fields will help to determinate if we already have got the results
-  property :start_date,     DateTime
-  property :end_date,       DateTime
-
-  property :created_at,     DateTime
+  field :created_at,     type: DateTime, default: ->{ Time.now }
 end

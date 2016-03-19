@@ -1,11 +1,7 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'dotenv'
-require 'dm-core'
-require 'dm-timestamps'
-require 'dm-validations'
-require 'dm-aggregates'
-require 'dm-migrations'
+require 'mongoid'
 require 'ostruct'
 
 require 'slim'
@@ -24,7 +20,5 @@ configure do
   $LOAD_PATH.unshift("#{File.dirname(__FILE__)}/lib")
   Dir.glob("#{File.dirname(__FILE__)}/lib/*.rb") { |lib| require File.basename(lib, '.*') }
 
-  DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{File.expand_path(File.dirname(__FILE__))}/#{Sinatra::Base.environment}.db"))
-  DataMapper.finalize
-  DataMapper.auto_upgrade!
+  Mongoid.load!(File.join(File.dirname(__FILE__), "db/mongoid.yml"), :development)
 end

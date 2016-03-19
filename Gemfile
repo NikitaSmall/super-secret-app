@@ -6,16 +6,10 @@ gem 'sinatra-contrib'
 gem 'json', '>= 1.8.3'
 gem 'dotenv'
 gem 'rake'
-gem 'data_mapper'
-gem 'dm-core'
-gem 'dm-sqlite-adapter'
-gem 'dm-mysql-adapter'
-gem 'dm-timestamps'
-gem 'dm-validations'
-gem 'dm-aggregates'
-gem 'dm-migrations'
+gem 'mongoid'
 
 gem 'github_api'
+gem 'activesupport'
 
 gem 'slim'
 

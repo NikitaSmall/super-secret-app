@@ -16,8 +16,7 @@ Sinatra::Base.set :logging, false
 require File.join(File.dirname(__FILE__), '../application')
 
 # establish in-memory database for testing
-DataMapper.setup(:default, "sqlite3::memory:")
-DataMapper.finalize
+Mongoid.load!(File.join(File.dirname(__FILE__), "../db/mongoid.yml"), :test)
 
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/vcr_cassettes'
@@ -26,5 +25,5 @@ end
 
 RSpec.configure do |config|
   # reset database before each example is run
-  config.before(:each) { DataMapper.auto_migrate! }
+  Mongoid::Config.purge!
 end
