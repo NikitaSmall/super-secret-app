@@ -1,12 +1,21 @@
 .panel.panel-success
-  .panel-heading="Repos"
+  .panel-heading
+    h3.panel-title Repos
   .panel-body
-    | You may see a list of new repositories.
-    ="Sorted by #{sorting.gsub('_', ' ')}"
+    p
+      | You may see a list of new repositories
+      =" sorted by #{sorting.gsub('_', ' ')}. "
+      p="You see at changes for last #{normal_form(criteria_period)}, for repositories created last #{normal_form(search_period)}."
+      p
+        a(href="/") Back to main page
 
-- repos.each do |repo|
-  .panel.panel-default
-    .panel-heading=repo['full_name']
-    .panel-body
-      p=repo['description']
-      p="stars for selected period: #{repo['stargazers_count']}"
+    - repos.each do |repo|
+      .panel.panel-default
+        .panel-heading
+          =repo['full_name'] + ', '
+          a(href=repo['html_url'] target='_blank') GitHub page
+        .panel-body
+          p=repo['description']
+          p="stars for selected period: #{check_number(repo['stargazers_count'])}"
+          p="commits for selected period: #{check_number(repo['commits_count'])}"
+          p="contributors for selected period: #{check_number(repo['contributors_count'])}"

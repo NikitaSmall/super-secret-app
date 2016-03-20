@@ -3,3 +3,24 @@
   .panel-body
     | You may find great github repos in this app.
     | Simply set preferences and press search!
+    form(action="/repos" method="POST")
+      .form-group
+        label Select period of repos creation:
+        select.form-control(name="period")
+          option(value="weekly" selected="true") Last week
+          option(value="monthly") Last month
+
+      .form-group
+        label Select period of searching:
+        select.form-control(name="criteria_period")
+          option(value="weekly" selected="true") Last week
+          option(value="monthly") Last month
+
+      .form-group
+        label Select sorting:
+        select.form-control(name="sorting")
+          option(value="stargazers_count" selected="true") Sort by stars count
+          option(value="commits_count") Sort by commits count
+          option(value="contributors_count") Sort by contributors count
+
+      input.btn.btn-default(type="submit" value="Search for repos!")

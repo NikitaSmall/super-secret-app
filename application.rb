@@ -17,6 +17,21 @@ class App < Sinatra::Base
     enable :logging
   end
 
+  helpers do
+    def check_number(number)
+      number == 100 ? 'more than one hundred!' : "#{number}"
+    end
+
+    def normal_form(mode)
+      case mode
+      when 'weekly'
+        'week'
+      when 'monthly'
+        'month'
+      end
+    end
+  end
+
   # error handling
   not_found do
     slim 'h1 Your path is blocked!'

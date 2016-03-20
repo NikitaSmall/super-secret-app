@@ -15,7 +15,12 @@ module Sinatra
               params[:criteria_period], params[:sorting]
             )
 
-            slim :repos, locals: { sorting: params[:sorting], repos: parser.parse }
+            slim :repos, locals: {
+              search_period: params[:period],
+              criteria_period: params[:criteria_period],
+              sorting: params[:sorting],
+              repos: parser.parse,
+            }
           end
 
           repo_chart = lambda do
@@ -23,7 +28,7 @@ module Sinatra
           end
 
           app.get "/", &main_page
-          app.get "/repos/:period/:criteria_period/:sorting", &repos
+          app.post "/repos", &repos
           app.get "/repo_chart", &repo_chart
         end
 
