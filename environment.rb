@@ -7,6 +7,8 @@ require 'ostruct'
 require 'slim'
 require 'sinatra' unless defined?(Sinatra)
 
+require 'active_support/core_ext/numeric/time'
+
 Dotenv.load
 
 configure do

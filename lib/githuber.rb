@@ -1,4 +1,3 @@
-require 'active_support/core_ext/numeric/time'
 require 'github_api'
 
 require 'date'
@@ -9,7 +8,7 @@ class Githuber
   # keys which will be deleted during filtering to save space
   UNUSED_KEYS = ['owner', 'teams_url', 'hooks_url', 'events_url', 'assignees_url',
     'branches_url', 'tags_url', 'blobs_url', 'git_tags_url', 'git_refs_url',
-    'trees_url', 'statuses_url', 'languages_url', 'stargazers_url',
+    'trees_url', 'statuses_url', 'languages_url',
     'subscribers_url', 'subscription_url', 'git_commits_url', 'comments_url',
     'issue_comment_url', 'contents_url', 'compare_url', 'merges_url', 'archive_url',
     'downloads_url', 'issues_url', 'pulls_url', 'milestones_url', 'notifications_url',
@@ -17,7 +16,11 @@ class Githuber
 
   def initialize(mode = :weekly)
     @mode = mode
-    @client = Github.new
+    @client = Github.new(
+      auto_pagination: true,
+      client_id: ENV['GITHUB_CLIENT_ID'],
+      client_secret: ENV['GITHUB_CLIENT_SECRET']
+    )
   end
 
   def repos
@@ -56,6 +59,6 @@ class Githuber
 
     hash_data["items"].each do |repo|
       UNUSED_KEYS.each { |unused_key| repo.delete(unused_key) }
-    end.first(500) # I need to trunkate results to store them on free Heroku
+    end
   end
 end

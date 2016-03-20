@@ -4,6 +4,7 @@ class Repo
 
   field :full_name, type: String
   field :original_query, type: String
+  field :mode, type: String
 
   field :html_url,  type: String
   field :description, type: String
@@ -13,7 +14,7 @@ class Repo
   field :contributors_count, type: Integer
 
   index({ full_name: 1 })
-  index({ original_query: 1 })
+  index({ original_query: 1, mode: 1 })
 
   index({ stargazers_count: 1 })
   index({ commits_count: 1 })
