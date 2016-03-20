@@ -5,11 +5,12 @@ class RepoParser
 
   ALLOWED_KEYS = ['full_name', 'html_url', 'description']
 
-  def initialize(original_query, raw_repos, mode = 'weekly')
+  def initialize(original_query, raw_repos, mode = 'weekly', sort = :stargazers_count)
     @original_query = original_query
     @raw_repos = raw_repos
 
     @mode = date_in_bounds?(mode) ? mode : 'weekly'
+    @sort = sort
   end
 
   def parse
@@ -25,7 +26,9 @@ class RepoParser
   end
 
   def cached_repos
-    @repos ||= Repo.where(original_query: @original_query, mode: @mode).to_a.map(&:attributes)
+    @repos ||= Repo.
+      where(original_query: @original_query, mode: @mode).
+      sort(@sort => -1).to_a.map(&:attributes)
   end
 
   def save_repos(batch)
@@ -41,6 +44,8 @@ class RepoParser
       raw_repo['original_query'] = @original_query
       raw_repo['mode'] = @mode
     end
+
+    @raw_repos.sort { |r_one, r_two| r_two[@sort.to_s] <=> r_one[@sort.to_s] }
   end
 
   def collect_statistics(repo)

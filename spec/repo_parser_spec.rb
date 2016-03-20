@@ -76,4 +76,31 @@ describe RepoParser do
       expect(repos.first).to be_a(Hash)
     end
   end
+
+  it 'returns result sorted by default (by stars)' do
+    VCR.use_cassette('parse_result') do
+      parser = RepoParser.new(@client.query, @client.repos)
+      repos = parser.parse
+
+      expect(repos.first['stargazers_count']).to be > repos.last['stargazers_count']
+    end
+  end
+
+  it 'returns result sorted by commits' do
+    VCR.use_cassette('parse_result') do
+      parser = RepoParser.new(@client.query, @client.repos, 'weekly', :commits_count)
+      repos = parser.parse
+
+      expect(repos.first['commits_count']).to be > repos.last['commits_count']
+    end
+  end
+
+  it 'returns result sorted by contributors' do
+    VCR.use_cassette('parse_result') do
+      parser = RepoParser.new(@client.query, @client.repos, 'weekly', :contributors_count)
+      repos = parser.parse
+
+      expect(repos.first['contributors_count']).to be > repos.last['contributors_count']
+    end
+  end
 end

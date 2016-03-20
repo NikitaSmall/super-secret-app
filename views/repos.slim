@@ -1,9 +1,12 @@
 .panel.panel-success
-  .panel-heading="Repos chart"
+  .panel-heading="Repos"
   .panel-body
-    | You may see chart for new repositories.
-    | Sorted by stars count
+    | You may see a list of new repositories.
+    ="Sorted by #{sorting.gsub('_', ' ')}"
 
-.row
-  .panel
-    .panel-body#repo-chart
+- repos.each do |repo|
+  .panel.panel-default
+    .panel-heading=repo['full_name']
+    .panel-body
+      p=repo['description']
+      p="stars for selected period: #{repo['stargazers_count']}"
