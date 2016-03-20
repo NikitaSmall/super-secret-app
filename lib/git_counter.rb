@@ -22,7 +22,7 @@ class GitCounter
 
   private
   def commits_bunch
-    @commits_bunch = commits.select do |commit|
+    @commits_bunch ||= commits.select do |commit|
       Date.parse(commit['commit']['author']['date']) > @date
     end
   end
@@ -41,6 +41,7 @@ class GitCounter
     http.use_ssl = true
 
     request = Net::HTTP::Get.new(uri.request_uri)
+    # we need to provide these headers to get starring's date
     request.initialize_http_header({
       "Accept" => "application/vnd.github.v3.star+json",
       "User-Agent" => "super-secret-app"

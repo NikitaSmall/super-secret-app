@@ -5,6 +5,23 @@ describe RepoParser do
     @client = Githuber.new
   end
 
+  it 'keeps right mode of request' do
+    VCR.use_cassette('parse_result') do
+      client = Githuber.new(:monthly)
+      parser = RepoParser.new(client.query, client.repos, 'monthly')
+
+      expect(parser.mode).to eq('monthly')
+    end
+  end
+
+  it 'fixs mode of request if needed' do
+    VCR.use_cassette('parse_result') do
+      parser = RepoParser.new(@client.query, @client.repos, 'monthly')
+      # we can search for month-old data in a weekdays old repo, but it is useless
+      expect(parser.mode).to eq('weekly')
+    end
+  end
+
   it 'returns array of hashes' do
     VCR.use_cassette('parse_result') do
       @parser = RepoParser.new(@client.query, @client.repos)

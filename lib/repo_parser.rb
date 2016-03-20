@@ -1,4 +1,7 @@
+require 'date'
+
 class RepoParser
+  attr_reader :mode
 
   ALLOWED_KEYS = ['full_name', 'html_url', 'description']
 
@@ -6,7 +9,7 @@ class RepoParser
     @original_query = original_query
     @raw_repos = raw_repos
 
-    @mode = mode
+    @mode = date_in_bounds?(mode) ? mode : 'weekly'
   end
 
   def parse
@@ -46,5 +49,21 @@ class RepoParser
     repo['stargazers_count'] = counter.count_stargazers
     repo['contributors_count'] = counter.count_contributors
     repo['commits_count'] = counter.count_commits
+  end
+
+  def date_in_bounds?(mode)
+    left_date, _ = @original_query[8..-1].split('..')
+    start_date = Date.parse(left_date)
+
+    start_date <= criteria_start_date(mode)
+  end
+
+  def criteria_start_date(mode)
+    case mode
+    when 'weekly'
+      7
+    when 'monthly'
+      30
+    end.days.ago.to_date
   end
 end
