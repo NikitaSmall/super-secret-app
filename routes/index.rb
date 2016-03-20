@@ -8,7 +8,12 @@ module Sinatra
             slim :index
           end
 
+          repo_charts = lambda do
+            slim :repos
+          end
+
           app.get "/", &main_page
+          app.get "/repos", &repo_charts
         end
 
       end
