@@ -1,5 +1,3 @@
-require 'github_api'
-
 require 'date'
 
 class Githuber
@@ -16,11 +14,6 @@ class Githuber
 
   def initialize(mode = :weekly)
     @mode = mode
-    @client = Github.new(
-      auto_pagination: true,
-      client_id: ENV['GITHUB_CLIENT_ID'],
-      client_secret: ENV['GITHUB_CLIENT_SECRET']
-    )
   end
 
   def repos
@@ -35,7 +28,7 @@ class Githuber
   def get_repos
     return cached_repos if cached_repos
 
-    raw_result = filter_data @client.search.repos(q: query)
+    raw_result = filter_data repos_request
     save_repos(raw_result)
   end
 
@@ -55,10 +48,18 @@ class Githuber
 
   # we need to filter data due to save space and remove a lot of unused information
   def filter_data(data)
-    hash_data = data.body.to_h
-
-    hash_data["items"].each do |repo|
+    data["items"].each do |repo|
       UNUSED_KEYS.each { |unused_key| repo.delete(unused_key) }
     end
+  end
+
+  def repos_request
+    # per_pare count reduced explicitly due to reducing time of request. 2N+1 requests aren't joke!
+    uri = URI("https://api.github.com/search/repositories?per_page=30&q=#{query}&#{api_credentials}")
+    JSON.parse(Net::HTTP.get(uri))
+  end
+
+  def api_credentials
+    "client_id=#{ENV['GITHUB_CLIENT_ID']}&client_secret=#{ENV['GITHUB_CLIENT_SECRET']}"
   end
 end

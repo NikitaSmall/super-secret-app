@@ -28,15 +28,19 @@ class GitCounter
   end
 
   def stars
-    @stars ||= star_request
+    @stars ||= parse(star_request)
   end
 
   def commits
-    @commits ||= commit_request
+    @commits ||= parse(commit_request)
+  end
+
+  def parse(response)
+    JSON.parse response
   end
 
   def star_request
-    uri = URI("https://api.github.com/repos/#{@repo_name}/stargazers?per_page=500&#{api_credentials}")
+    uri = URI("https://api.github.com/repos/#{@repo_name}/stargazers?per_page=100&#{api_credentials}")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
 
@@ -48,12 +52,12 @@ class GitCounter
     })
     response = http.request(request)
 
-    JSON.parse(response.body)
+    response.body
   end
 
   def commit_request
-    uri = URI("https://api.github.com/repos/#{@repo_name}/commits?per_page=200&#{api_credentials}")
-    JSON.parse(Net::HTTP.get(uri))
+    uri = URI("https://api.github.com/repos/#{@repo_name}/commits?per_page=100&#{api_credentials}")
+    Net::HTTP.get(uri)
   end
 
   def api_credentials

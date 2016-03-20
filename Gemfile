@@ -8,7 +8,6 @@ gem 'dotenv'
 gem 'rake'
 gem 'mongoid'
 
-gem 'github_api'
 gem 'activesupport'
 
 gem 'slim'
