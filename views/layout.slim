@@ -5,12 +5,11 @@ html
     link(rel='stylesheet' href='/bootstrap/css/bootstrap.min.css')
     link(rel='stylesheet' href='/style.css')
     link(rel='stylesheet' href='/chartist-js/chartist.min.css')
+    
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
   body
     .content
       .col-md-10.col-md-offset-1
         == yield
 
-    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
     script(src='/bootstrap/js/bootstrap.min.js')
-    script(src="/chartist-js/chartist.min.js")
-    script(src='/main.js')

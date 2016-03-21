@@ -24,12 +24,21 @@ module Sinatra
           end
 
           repo_chart = lambda do
-            slim :repo_chart
+            start_date = params[:mode] == 'weekly' ? 7.days.ago.to_s : 30.days.ago.to_s
+            parser = DetailParser.new(params[:repo_name], start_date, Time.now.to_s)
+
+            slim :repo_chart, locals: {
+              repo_name: params[:repo_name],
+              mode: params[:mode],
+              stars: parser.stargazers_statistics,
+              commits: parser.commits_statistics,
+              contributors: parser.contributors_statistics
+            }
           end
 
           app.get "/", &main_page
           app.post "/repos", &repos
-          app.get "/repo_chart", &repo_chart
+          app.get "/repo_charts/:mode", &repo_chart
         end
 
       end

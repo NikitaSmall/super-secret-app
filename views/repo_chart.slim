@@ -1,9 +1,59 @@
 .panel.panel-success
-  .panel-heading="Repos chart"
+  .panel-heading
+    h3.panel-title="#{repo_name} repo charts"
   .panel-body
-    | You may see chart for new repositories.
-    | Sorted by stars count
+    p
+      a(href="/") Back to main page
+    | You may see charts for current repository. 
+    | Here you can see its' #{mode} activity:
 
 .row
-  .panel
-    .panel-body#repo-chart
+  .panel.panel-default
+    .panel-heading
+      h4.panel-title="#{repo_name} stargazers chart"
+    .panel-body#star-chart
+    
+.row
+  .panel.panel-default
+    .panel-heading
+      h4.panel-title="#{repo_name} commits chart"
+    .panel
+      .panel-body#commits-chart
+      
+.row
+  .panel.panel-default
+    .panel-heading
+      h4.panel-title="#{repo_name} contributors chart"
+    .panel
+      .panel-body#contributors-chart
+
+
+
+script(src="/chartist-js/chartist.min.js")
+javascript:
+  var starData = {
+    labels: "#{stars.keys.map{ |k| k.to_s }.join(', ')}".split(', '),
+    series: [
+      [#{stars.values.join(', ')}]
+    ]
+  };
+
+  new Chartist.Line('#star-chart', starData);
+  
+  var commitsData = {
+    labels: "#{commits.keys.map{ |k| k.to_s }.join(', ')}".split(', '),
+    series: [
+      [#{commits.values.join(', ')}]
+    ]
+  };
+
+  new Chartist.Line('#commits-chart', commitsData);
+  
+  var contributorsData = {
+    labels: "#{contributors.keys.map{ |k| k.to_s }.join(', ')}".split(', '),
+    series: [
+      [#{contributors.values.join(', ')}]
+    ]
+  };
+
+  new Chartist.Line('#contributors-chart', contributorsData);

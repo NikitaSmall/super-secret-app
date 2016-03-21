@@ -10,18 +10,18 @@ class DetailParser < GitCounter
 
   def stargazers_statistics
     return cached_stars if cached_stars
-    save_stars(Hash[filtered_stars.map{ |date, star| [date.to_s, star.count] }])
+    save_stars(Hash[filtered_stars.map{ |date, star| [date.to_s, star.count] }.sort])
   end
 
   def commits_statistics
     return cached_commits if cached_commits
-    save_commits(Hash[filtered_commits.map{ |date, commit| [date.to_s, commit.count] }])
+    save_commits(Hash[filtered_commits.map{ |date, commit| [date.to_s, commit.count] }.sort])
   end
 
   def contributors_statistics
     return cached_contributors if cached_contributors
     save_contributors(
-      Hash[filtered_commits.map{ |date, commit| [date.to_s, commit.uniq{ |commit| commit['commit']['author']['email'] }.count] }]
+      Hash[filtered_commits.map{ |date, commit| [date.to_s, commit.uniq{ |commit| commit['commit']['author']['email'] }.count] }.sort]
     )
   end
 

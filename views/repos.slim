@@ -15,6 +15,11 @@
           =repo['full_name'] + ', '
           a(href=repo['html_url'] target='_blank') GitHub page
         .panel-body
+          p 
+            | See the detail information about 
+            a(href="/repo_charts/weekly?repo_name=#{repo['full_name']}") weekly activity 
+            | and 
+            a(href="/repo_charts/monthly?repo_name=#{repo['full_name']}") monthly activity 
           p=repo['description']
           p="stars for selected period: #{check_number(repo['stargazers_count'])}"
           p="commits for selected period: #{check_number(repo['commits_count'])}"
