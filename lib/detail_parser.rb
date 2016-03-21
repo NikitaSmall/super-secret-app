@@ -6,6 +6,12 @@ class DetailParser < GitCounter
 
     @start_date = Date.parse(start_date)
     @end_date = Date.parse(end_date)
+
+    # @stars = []
+    # @commits = []
+
+    @star_page = 1
+    @commit_page = 1
   end
 
   def stargazers_statistics
