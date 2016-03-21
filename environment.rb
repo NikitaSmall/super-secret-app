@@ -22,5 +22,5 @@ configure do
   $LOAD_PATH.unshift("#{File.dirname(__FILE__)}/lib")
   Dir.glob("#{File.dirname(__FILE__)}/lib/*.rb") { |lib| require File.basename(lib, '.*') }
 
-  Mongoid.load!(File.join(File.dirname(__FILE__), "db/mongoid.yml"), :development)
+  Mongoid.load!(File.join(File.dirname(__FILE__), "db/mongoid.yml"), ENV['MONGOID_ENV'].to_sym)
 end

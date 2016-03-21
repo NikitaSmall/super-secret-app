@@ -55,7 +55,7 @@ class Githuber
 
   def repos_request
     # per_pare count reduced explicitly due to reducing time of request. 2N+1 requests aren't joke!
-    uri = URI("https://api.github.com/search/repositories?per_page=30&q=#{query}&#{api_credentials}")
+    uri = URI("https://api.github.com/search/repositories?per_page=50&q=#{query}&#{api_credentials}")
     JSON.parse(Net::HTTP.get(uri))
   end
 

@@ -11,3 +11,10 @@ test:
       database: githuberTest
       hosts:
         - localhost:27017
+
+production:
+  clients:
+    default:
+      database: someBase
+      hosts:
+        - localhost:27017
