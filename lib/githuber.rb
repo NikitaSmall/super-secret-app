@@ -75,13 +75,13 @@ class Githuber
 
   def orgs_request
     # per_pare count reduced explicitly due to reducing time of request. 2N+1 requests aren't joke!
-    uri = URI("https://api.github.com/search/users?per_page=50&q=type:org+#{query}&#{api_credentials}")
+    uri = URI("https://api.github.com/search/users?page=20&per_page=50&sort=repositories&q=type:org+#{query}&#{api_credentials}")
     JSON.parse(Net::HTTP.get(uri))
   end
 
   def repos_request
     # per_pare count reduced explicitly due to reducing time of request. 2N+1 requests aren't joke!
-    uri = URI("https://api.github.com/search/repositories?per_page=50&q=#{query}&#{api_credentials}")
+    uri = URI("https://api.github.com/search/repositories?per_page=40&q=#{query}&#{api_credentials}")
     JSON.parse(Net::HTTP.get(uri))
   end
 

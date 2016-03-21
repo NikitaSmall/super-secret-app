@@ -5,8 +5,8 @@ require 'date'
 class GitCounter
   def initialize(repo_name, mode)
     @repo_name = repo_name
-    @date = (mode == 'weekly') ? 7.days.ago : 30.days.ago
-
+    @date = select_date(mode)
+    
     # @stars = []
     # @commits = []
 
@@ -28,6 +28,8 @@ class GitCounter
 
   private
   def commits_bunch
+    return [] unless commits.is_a? Array
+
     @commits_bunch ||= commits.select do |commit|
       Date.parse(commit['commit']['author']['date']) > @date
     end
@@ -88,5 +90,16 @@ class GitCounter
 
   def api_credentials
     "client_id=#{ENV['GITHUB_CLIENT_ID']}&client_secret=#{ENV['GITHUB_CLIENT_SECRET']}"
+  end
+
+  def select_date(mode)
+    case mode
+    when 'weekly'
+      7.days.ago
+    when 'monthly'
+      30.days.ago
+    when 'eternal'
+      9000.days.ago
+    end
   end
 end
