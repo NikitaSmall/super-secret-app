@@ -82,7 +82,7 @@ class GitCounter
   end
 
   def commit_request
-    uri = URI("https://api.github.com/repos/#{@repo_name}/commits?page=#{@commit_page}per_page=100&#{api_credentials}")
+    uri = URI("https://api.github.com/repos/#{@repo_name}/commits?page=#{@commit_page}&per_page=100&#{api_credentials}")
     Net::HTTP.get(uri)
   end
 

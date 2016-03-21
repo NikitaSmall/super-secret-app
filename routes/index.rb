@@ -37,6 +37,7 @@ module Sinatra
           end
 
           app.get "/", &main_page
+          
           app.post "/repos", &repos
           app.get "/repo_charts/:mode", &repo_chart
         end

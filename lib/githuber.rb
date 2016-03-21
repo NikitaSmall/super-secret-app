@@ -20,11 +20,31 @@ class Githuber
     @repos ||= get_repos
   end
 
+  def orgs
+    @orgs ||= get_orgs
+  end
+
   def query
     @query ||= "created:#{date_range}"
   end
 
   private
+  def get_orgs
+    return cached_orgs if cached_orgs
+
+    raw_result = filter_data orgs_request
+    save_orgs(raw_result)
+  end
+
+  def cached_orgs
+    @cache ||= OrgsRawResult.where(original_query: query).pluck("result").first
+  end
+
+  def save_orgs(raw_result)
+    OrgsRawResult.create(result: raw_result, original_query: query)
+    raw_result
+  end
+
   def get_repos
     return cached_repos if cached_repos
 
@@ -51,6 +71,12 @@ class Githuber
     data["items"].each do |repo|
       UNUSED_KEYS.each { |unused_key| repo.delete(unused_key) }
     end
+  end
+
+  def orgs_request
+    # per_pare count reduced explicitly due to reducing time of request. 2N+1 requests aren't joke!
+    uri = URI("https://api.github.com/search/users?per_page=50&q=type:org+#{query}&#{api_credentials}")
+    JSON.parse(Net::HTTP.get(uri))
   end
 
   def repos_request
