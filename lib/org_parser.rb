@@ -1,12 +1,18 @@
 require 'date'
 require 'json'
 
+require_relative 'github_api.rb'
+require_relative 'parser_helper.rb'
+
 class OrgParser
   attr_reader :mode
 
+  include GithubApi
+  include ParserHelper
+
   ALLOWED_KEYS = ['login', 'html_url']
 
-  def initialize(original_query, raw_orgs, mode = 'weekly', sort = :commits_count)
+  def initialize(original_query, raw_orgs, mode = 'weekly', sort = :total_commits_count)
     @original_query = original_query
     @raw_orgs = raw_orgs
 
@@ -58,44 +64,10 @@ class OrgParser
   end
 
   def repos(org)
-    parse_request(repos_request(org['login']))
+    parse_response(orgs_repos_request(org['login']))
   end
 
   def members(org)
-    parse_request(members_request(org['login']))
-  end
-
-  def repos_request(orgs_name)
-    uri = URI("https://api.github.com/orgs/#{orgs_name}/repos?per_page=100&#{api_credentials}")
-    Net::HTTP.get(uri)
-  end
-
-  def members_request(orgs_name)
-    uri = URI("https://api.github.com/orgs/#{orgs_name}/members?per_page=100&#{api_credentials}")
-    Net::HTTP.get(uri)
-  end
-
-  def parse_request(request_result)
-    result = JSON.parse(request_result)
-  end
-
-  def date_in_bounds?(mode)
-    left_date, _ = @original_query[8..-1].split('..')
-    start_date = Date.parse(left_date)
-
-    start_date <= criteria_start_date(mode)
-  end
-
-  def criteria_start_date(mode)
-    case mode
-    when 'weekly'
-      7
-    when 'monthly'
-      30
-    end.days.ago.to_date
-  end
-
-  def api_credentials
-    "client_id=#{ENV['GITHUB_CLIENT_ID']}&client_secret=#{ENV['GITHUB_CLIENT_SECRET']}"
+    parse_response(members_request(org['login']))
   end
 end

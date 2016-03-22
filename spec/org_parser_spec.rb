@@ -17,7 +17,7 @@ describe OrgParser do
   it 'fixs mode of request if needed' do
     VCR.use_cassette('orgs_parse_result') do
       parser = OrgParser.new(@client.query, @client.orgs, 'monthly')
-      # we can search for month-old data in a weekdays old repo, but it is useless
+      # we can search for month-old data in a week-old organizations, but it is useless
       expect(parser.mode).to eq('weekly')
     end
   end
@@ -79,19 +79,19 @@ describe OrgParser do
 
   it 'returns result sorted by average commits count' do
     VCR.use_cassette('orgs_parse_result') do
-      parser = OrgParser.new(@client.query, @client.orgs)
+      parser = OrgParser.new(@client.query, @client.orgs, 'weekly', :average_commits_count)
       orgs = parser.parse
 
-      expect(orgs.first['average_commits_count']).to be > orgs.last['average_commits_count']
+      expect(orgs.first['average_commits_count']).to be >= orgs.last['average_commits_count']
     end
   end
 
   it 'returns result sorted by total commits count' do
     VCR.use_cassette('orgs_parse_result') do
-      parser = OrgParser.new(@client.query, @client.orgs, 'weekly', :contributors_count)
+      parser = OrgParser.new(@client.query, @client.orgs, 'weekly', :total_commits_count)
       orgs = parser.parse
 
-      expect(orgs.first['total_commits_count']).to be > orgs.last['total_commits_count']
+      expect(orgs.first['total_commits_count']).to be >= orgs.last['total_commits_count']
     end
   end
 end

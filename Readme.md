@@ -21,7 +21,13 @@ but only three will be different:
 - Apps created last month / apps' activity for last month
 
 ### Personal comment
-This task shows perfectly typical N+1 query problem to external API
-with huge side computing.
+This task shows perfectly typical N+1 query problem to external API with huge side computing.
 I may be wrong but I think that such kinds of clever/tricky tasks fits perfectly
 when we can design our API. Anyway, the task is comlete.
+
+I made a research and communicated with github support. Here is their answer:
+
+'There's no equivalent in the API for the data shown on the Trending page.
+Also, the trending page shows only stars, not commits or contributors, as you mentioned.
+To answer your question -- no, there's no simple way to collect this data via the API
+in a small number of requests. You might need to make several requests per number per repository.'

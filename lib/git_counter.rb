@@ -2,11 +2,15 @@ require 'net/http'
 require 'json'
 require 'date'
 
+require_relative 'github_api.rb'
+
 class GitCounter
+  include GithubApi
+
   def initialize(repo_name, mode)
     @repo_name = repo_name
     @date = select_date(mode)
-    
+
     # @stars = []
     # @commits = []
 
@@ -39,57 +43,28 @@ class GitCounter
     # return @stars unless @stars.empty?
 
     # loop do
-    #   temp_stars = parse(star_request)
+    #   temp_stars = parse_response(star_request)
 
     #   @stars += temp_stars
     #   @star_page += 1
     #   break if temp_stars.count < 100
     # end
 
-    @stars ||= parse(star_request)
+    @stars ||= parse_response(star_request)
   end
 
   def commits
     # return @commits unless @commits.empty?
 
     # loop do
-    #   temp_commits = parse(commit_request)
+    #   temp_commits = parse_response(commit_request)
     #
     #   @commits += temp_commits
     #   @commit_page += 1
     #   break if temp_commits.count < 100
     # end
 
-    @commits ||= parse(commit_request)
-  end
-
-  def parse(response)
-    JSON.parse response
-  end
-
-  def star_request
-    uri = URI("https://api.github.com/repos/#{@repo_name}/stargazers?page=#{@star_page}&per_page=100&#{api_credentials}")
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-
-    request = Net::HTTP::Get.new(uri.request_uri)
-    # we need to provide these headers to get starring's date
-    request.initialize_http_header({
-      "Accept" => "application/vnd.github.v3.star+json",
-      "User-Agent" => "super-secret-app"
-    })
-    response = http.request(request)
-
-    response.body
-  end
-
-  def commit_request
-    uri = URI("https://api.github.com/repos/#{@repo_name}/commits?page=#{@commit_page}&per_page=100&#{api_credentials}")
-    Net::HTTP.get(uri)
-  end
-
-  def api_credentials
-    "client_id=#{ENV['GITHUB_CLIENT_ID']}&client_secret=#{ENV['GITHUB_CLIENT_SECRET']}"
+    @commits ||= parse_response(commit_request)
   end
 
   def select_date(mode)

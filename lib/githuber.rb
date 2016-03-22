@@ -1,7 +1,10 @@
 require 'date'
+require_relative 'github_api.rb'
 
 class Githuber
   attr_reader :mode
+
+  include GithubApi
 
   # keys which will be deleted during filtering to save space
   UNUSED_KEYS = ['owner', 'teams_url', 'hooks_url', 'events_url', 'assignees_url',
@@ -32,7 +35,7 @@ class Githuber
   def get_orgs
     return cached_orgs if cached_orgs
 
-    raw_result = filter_data orgs_request
+    raw_result = filter_data parse_response(orgs_request)
     save_orgs(raw_result)
   end
 
@@ -48,7 +51,7 @@ class Githuber
   def get_repos
     return cached_repos if cached_repos
 
-    raw_result = filter_data repos_request
+    raw_result = filter_data parse_response(repos_request)
     save_repos(raw_result)
   end
 
@@ -71,21 +74,5 @@ class Githuber
     data["items"].each do |repo|
       UNUSED_KEYS.each { |unused_key| repo.delete(unused_key) }
     end
-  end
-
-  def orgs_request
-    # per_pare count reduced explicitly due to reducing time of request. 2N+1 requests aren't joke!
-    uri = URI("https://api.github.com/search/users?page=20&per_page=50&sort=repositories&q=type:org+#{query}&#{api_credentials}")
-    JSON.parse(Net::HTTP.get(uri))
-  end
-
-  def repos_request
-    # per_pare count reduced explicitly due to reducing time of request. 2N+1 requests aren't joke!
-    uri = URI("https://api.github.com/search/repositories?per_page=40&q=#{query}&#{api_credentials}")
-    JSON.parse(Net::HTTP.get(uri))
-  end
-
-  def api_credentials
-    "client_id=#{ENV['GITHUB_CLIENT_ID']}&client_secret=#{ENV['GITHUB_CLIENT_SECRET']}"
   end
 end
