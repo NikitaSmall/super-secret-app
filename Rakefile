@@ -71,3 +71,47 @@ namespace :org do
     parser.parse
   end
 end
+
+namespace :repo_detail do
+  task :weekly do
+    client = Githuber.new(:weekly)
+    parser = RepoParser.new(client.query, client.repos, 'weekly', :contributors_count)
+
+    repos = parser.parse
+    repos.each do |repo|
+      parser = DetailParser.new(repo['full_name'], 8.days.ago.to_s, Time.now.to_s)
+
+      parser.stargazers_statistics
+      parser.commits_statistics
+      parser.contributors_statistics
+    end
+  end
+
+  task :monthly do
+    client = Githuber.new(:monthly)
+    parser = RepoParser.new(client.query, client.repos, 'monthly', :contributors_count)
+
+    repos = parser.parse
+    repos.each do |repo|
+      parser = DetailParser.new(repo['full_name'], 31.days.ago.to_s, Time.now.to_s)
+
+      parser.stargazers_statistics
+      parser.commits_statistics
+      parser.contributors_statistics
+    end
+  end
+
+  task :last_monthly do
+    client = Githuber.new(:monthly)
+    parser = RepoParser.new(client.query, client.repos, 'weekly', :contributors_count)
+
+    repos = parser.parse
+    repos.each do |repo|
+      parser = DetailParser.new(repo['full_name'], 8.days.ago.to_s, Time.now.to_s)
+
+      parser.stargazers_statistics
+      parser.commits_statistics
+      parser.contributors_statistics
+    end
+  end
+end

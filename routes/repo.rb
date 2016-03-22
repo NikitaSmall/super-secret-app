@@ -20,7 +20,7 @@ module Sinatra
           end
 
           repo_chart = lambda do
-            start_date = params[:mode] == 'weekly' ? 7.days.ago.to_s : 30.days.ago.to_s
+            start_date = params[:mode] == 'weekly' ? 8.days.ago.to_s : 31.days.ago.to_s
             parser = DetailParser.new(params[:repo_name], start_date, Time.now.to_s)
 
             slim :repo_chart, locals: {
