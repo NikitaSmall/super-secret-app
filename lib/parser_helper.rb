@@ -9,9 +9,9 @@ module ParserHelper
   def criteria_start_date(mode)
     case mode
     when 'weekly'
-      7
+      8
     when 'monthly'
-      30
+      31
     end.days.ago.to_date
   end
 end

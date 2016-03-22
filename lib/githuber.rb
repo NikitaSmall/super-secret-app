@@ -65,7 +65,7 @@ class Githuber
   end
 
   def date_range
-    range = (@mode == :weekly) ? 7 : 30
+    range = (@mode == :weekly) ? 8 : 31
     "#{range.days.ago.strftime('%Y-%m-%d')}..#{Date.today.strftime('%Y-%m-%d')}"
   end
 

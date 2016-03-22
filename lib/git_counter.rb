@@ -47,9 +47,9 @@ class GitCounter
   def select_date(mode)
     case mode
     when 'weekly'
-      7.days.ago
+      8.days.ago
     when 'monthly'
-      30.days.ago
+      31.days.ago
     when 'eternal'
       9000.days.ago
     end
