@@ -7,11 +7,11 @@ class DetailParser < GitCounter
     @start_date = Date.parse(start_date)
     @end_date = Date.parse(end_date)
 
-    # @stars = []
-    # @commits = []
+    @stars = []
+    @commits = []
 
-    @star_page = 1
-    @commit_page = 1
+    @star_page = 0
+    @commit_page = 0
   end
 
   def stargazers_statistics
@@ -32,6 +32,32 @@ class DetailParser < GitCounter
   end
 
   private
+  def stars
+    return @stars unless @stars.empty?
+
+    loop do
+      @star_page += 1
+
+      @stars += parse_response(star_request)
+      break if @stars.count < (100 * @star_page) || @star_page >= 10
+    end
+
+    @stars
+  end
+
+  def commits
+    return @commits unless @commits.empty?
+
+    loop do
+      @commit_page += 1
+
+      @commits += parse_response(commit_request)
+      break if @commits.count < (100 * @commit_page) || @commit_page >= 10
+    end
+
+    @commits
+  end
+
   def save_contributors(contributor_hash)
     Contributor.create(repo_name: @repo_name, start_date: @start_date, end_date: @end_date, result: contributor_hash)
     contributor_hash
