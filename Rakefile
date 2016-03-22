@@ -115,3 +115,77 @@ namespace :repo_detail do
     end
   end
 end
+
+namespace :scheduler do
+  task :repos do
+    client = Githuber.new(:weekly)
+    parser = RepoParser.new(client.query, client.repos, 'weekly', :contributors_count)
+
+    parser.parse
+
+    client = Githuber.new(:monthly)
+    parser = RepoParser.new(client.query, client.repos, 'monthly', :contributors_count)
+
+    parser.parse
+
+    client = Githuber.new(:monthly)
+    parser = RepoParser.new(client.query, client.repos, 'weekly', :contributors_count)
+
+    parser.parse
+  end
+
+  task :orgs do
+    client = Githuber.new(:weekly)
+    parser = OrgParser.new(client.query, client.orgs, 'weekly', :total_commits_count)
+
+    parser.parse
+
+    client = Githuber.new(:monthly)
+    parser = OrgParser.new(client.query, client.orgs, 'monthly', :total_commits_count)
+
+    parser.parse
+
+    client = Githuber.new(:monthly)
+    parser = OrgParser.new(client.query, client.orgs, 'weekly', :total_commits_count)
+
+    parser.parse
+  end
+
+  task :details do
+    client = Githuber.new(:weekly)
+    parser = RepoParser.new(client.query, client.repos, 'weekly', :contributors_count)
+
+    repos = parser.parse
+    repos.each do |repo|
+      parser = DetailParser.new(repo['full_name'], 8.days.ago.to_s, Time.now.to_s)
+
+      parser.stargazers_statistics
+      parser.commits_statistics
+      parser.contributors_statistics
+    end
+
+    client = Githuber.new(:monthly)
+    parser = RepoParser.new(client.query, client.repos, 'monthly', :contributors_count)
+
+    repos = parser.parse
+    repos.each do |repo|
+      parser = DetailParser.new(repo['full_name'], 31.days.ago.to_s, Time.now.to_s)
+
+      parser.stargazers_statistics
+      parser.commits_statistics
+      parser.contributors_statistics
+    end
+
+    client = Githuber.new(:monthly)
+    parser = RepoParser.new(client.query, client.repos, 'weekly', :contributors_count)
+
+    repos = parser.parse
+    repos.each do |repo|
+      parser = DetailParser.new(repo['full_name'], 8.days.ago.to_s, Time.now.to_s)
+
+      parser.stargazers_statistics
+      parser.commits_statistics
+      parser.contributors_statistics
+    end
+  end
+end

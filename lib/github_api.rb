@@ -1,7 +1,7 @@
 module GithubApi
   def repos_request
     # per_page count reduced explicitly due to reducing time of request. 2N+1 requests aren't joke!
-    Net::HTTP.get(URI("https://api.github.com/search/repositories?per_page=40&q=#{query}&#{api_credentials}"))
+    Net::HTTP.get(URI("https://api.github.com/search/repositories?per_page=50&q=#{query}&#{api_credentials}"))
   end
 
   def orgs_request
