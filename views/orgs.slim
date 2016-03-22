@@ -1,0 +1,19 @@
+.panel.panel-success
+  .panel-heading
+    h3.panel-title Orgs
+  .panel-body
+    p
+      | You may see a list of new organizations
+      =" sorted by #{sorting.gsub('_', ' ')}. "
+      p="You see at changes for last #{normal_form(criteria_period)}, for repositories created last #{normal_form(search_period)}."
+      p
+        a(href="/") Back to main page
+
+    - orgs.each do |org|
+      .panel.panel-default
+        .panel-heading
+          =org['login'] + ', '
+          a(href=org['html_url'] target='_blank') GitHub page
+        .panel-body            
+          p="total commits count for selected period: #{check_number(org['total_commits_count'])}"
+          p="average commits count for selected period: #{check_number(org['average_commits_count'])}"

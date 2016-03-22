@@ -11,9 +11,6 @@ class GitCounter
     @repo_name = repo_name
     @date = select_date(mode)
 
-    # @stars = []
-    # @commits = []
-
     @star_page = 1
     @commit_page = 1
   end
@@ -40,30 +37,10 @@ class GitCounter
   end
 
   def stars
-    # return @stars unless @stars.empty?
-
-    # loop do
-    #   temp_stars = parse_response(star_request)
-
-    #   @stars += temp_stars
-    #   @star_page += 1
-    #   break if temp_stars.count < 100
-    # end
-
     @stars ||= parse_response(star_request)
   end
 
   def commits
-    # return @commits unless @commits.empty?
-
-    # loop do
-    #   temp_commits = parse_response(commit_request)
-    #
-    #   @commits += temp_commits
-    #   @commit_page += 1
-    #   break if temp_commits.count < 100
-    # end
-
     @commits ||= parse_response(commit_request)
   end
 

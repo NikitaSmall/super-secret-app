@@ -6,7 +6,7 @@ module GithubApi
 
   def orgs_request
     # per_page count reduced explicitly due to reducing time of request. There is near orgs_number * repo_in_org_number + 1 request.
-    Net::HTTP.get(URI("https://api.github.com/search/users?page=20&per_page=50&sort=repositories&q=type:org+#{query}&#{api_credentials}"))
+    Net::HTTP.get(URI("https://api.github.com/search/users?page=19&per_page=50&sort=repositories&q=type:org+#{query}&#{api_credentials}"))
   end
 
   def star_request

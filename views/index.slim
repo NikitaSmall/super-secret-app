@@ -1,7 +1,8 @@
 .panel.panel-success
-  .panel-heading="Good day!"
+  .panel-heading
+    h3.panel-title="Repo search"
   .panel-body
-    | You may find great github repos in this app.
+    | You may find great github repos here.
     | Simply set preferences and press search!
     form(action="/repos" method="POST")
       .form-group
@@ -24,3 +25,30 @@
           option(value="contributors_count") Sort by contributors count
 
       input.btn.btn-default(type="submit" value="Search for repos!")
+      
+.panel.panel-info
+  .panel-heading
+    h3.panel-title="Organization search"
+  .panel-body
+    | You may find great github orgs here.
+    | Simply set preferences and press search!
+    form(action="/orgs" method="POST")
+      .form-group
+        label Select period of orgs creation:
+        select.form-control(name="period")
+          option(value="weekly" selected="true") Last week
+          option(value="monthly") Last month
+
+      .form-group
+        label Select period of searching:
+        select.form-control(name="criteria_period")
+          option(value="weekly" selected="true") Last week
+          option(value="monthly") Last month
+
+      .form-group
+        label Select sorting:
+        select.form-control(name="sorting")
+          option(value="total_commits_count" selected="true") Sort by total commit count
+          option(value="average_commits_count") Sort by average commits count (by person)
+
+      input.btn.btn-default(type="submit" value="Search for orgs!")
