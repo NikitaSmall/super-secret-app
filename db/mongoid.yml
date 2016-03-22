@@ -15,6 +15,9 @@ test:
 production:
   clients:
     default:
-      database: someBase
+      database: heroku_w988p5vq
       hosts:
-        - localhost:27017
+        - ds013579.mlab.com:13579
+      options:
+        user: 'heroku_w988p5vq'
+        password: '7hlki58vhskkh354c8kgc54bf5'
