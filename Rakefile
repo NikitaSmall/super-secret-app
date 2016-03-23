@@ -117,7 +117,7 @@ namespace :repo_detail do
 end
 
 namespace :scheduler do
-  task :repos do
+  task :cache do
     client = Githuber.new(:weekly)
     parser = RepoParser.new(client.query, client.repos, 'weekly', :contributors_count)
 
@@ -132,9 +132,7 @@ namespace :scheduler do
     parser = RepoParser.new(client.query, client.repos, 'weekly', :contributors_count)
 
     parser.parse
-  end
 
-  task :orgs do
     client = Githuber.new(:weekly)
     parser = OrgParser.new(client.query, client.orgs, 'weekly', :total_commits_count)
 
@@ -149,9 +147,7 @@ namespace :scheduler do
     parser = OrgParser.new(client.query, client.orgs, 'weekly', :total_commits_count)
 
     parser.parse
-  end
 
-  task :details do
     client = Githuber.new(:weekly)
     parser = RepoParser.new(client.query, client.repos, 'weekly', :contributors_count)
 

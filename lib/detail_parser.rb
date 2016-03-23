@@ -1,4 +1,5 @@
 require 'date'
+require_relative 'git_counter.rb'
 
 class DetailParser < GitCounter
   def initialize(repo_name, start_date, end_date)
