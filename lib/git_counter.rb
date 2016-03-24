@@ -2,8 +2,6 @@ require 'net/http'
 require 'json'
 require 'date'
 
-require_relative 'github_api.rb'
-
 class GitCounter
   include GithubApi
 

@@ -1,7 +1,5 @@
 require 'date'
 
-require_relative 'parser_helper.rb'
-
 class RepoParser
   attr_reader :mode
 

@@ -11,6 +11,4 @@ describe 'main application' do
     get '/'
     expect(last_response).to be_ok
   end
-
-  it 'should have more specs'
 end

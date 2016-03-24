@@ -1,12 +1,12 @@
 require 'rubygems'
 require 'bundler/setup'
-# require 'rspec/core/rake_task'
+require 'rspec/core/rake_task'
 require 'dotenv/tasks'
 
 require File.join(File.dirname(__FILE__), 'environment')
 
-# task :default => :test
-# task :test => :spec
+task :default => :test
+task :test => :spec
 
 if !defined?(RSpec)
   puts "spec targets require RSpec"
@@ -102,76 +102,6 @@ namespace :repo_detail do
   end
 
   task :last_monthly do
-    client = Githuber.new(:monthly)
-    parser = RepoParser.new(client.query, client.repos, 'weekly', :contributors_count)
-
-    repos = parser.parse
-    repos.each do |repo|
-      parser = DetailParser.new(repo['full_name'], 8.days.ago.to_s, Time.now.to_s)
-
-      parser.stargazers_statistics
-      parser.commits_statistics
-      parser.contributors_statistics
-    end
-  end
-end
-
-namespace :scheduler do
-  task :cache do
-    client = Githuber.new(:weekly)
-    parser = RepoParser.new(client.query, client.repos, 'weekly', :contributors_count)
-
-    parser.parse
-
-    client = Githuber.new(:monthly)
-    parser = RepoParser.new(client.query, client.repos, 'monthly', :contributors_count)
-
-    parser.parse
-
-    client = Githuber.new(:monthly)
-    parser = RepoParser.new(client.query, client.repos, 'weekly', :contributors_count)
-
-    parser.parse
-
-    client = Githuber.new(:weekly)
-    parser = OrgParser.new(client.query, client.orgs, 'weekly', :total_commits_count)
-
-    parser.parse
-
-    client = Githuber.new(:monthly)
-    parser = OrgParser.new(client.query, client.orgs, 'monthly', :total_commits_count)
-
-    parser.parse
-
-    client = Githuber.new(:monthly)
-    parser = OrgParser.new(client.query, client.orgs, 'weekly', :total_commits_count)
-
-    parser.parse
-
-    client = Githuber.new(:weekly)
-    parser = RepoParser.new(client.query, client.repos, 'weekly', :contributors_count)
-
-    repos = parser.parse
-    repos.each do |repo|
-      parser = DetailParser.new(repo['full_name'], 8.days.ago.to_s, Time.now.to_s)
-
-      parser.stargazers_statistics
-      parser.commits_statistics
-      parser.contributors_statistics
-    end
-
-    client = Githuber.new(:monthly)
-    parser = RepoParser.new(client.query, client.repos, 'monthly', :contributors_count)
-
-    repos = parser.parse
-    repos.each do |repo|
-      parser = DetailParser.new(repo['full_name'], 31.days.ago.to_s, Time.now.to_s)
-
-      parser.stargazers_statistics
-      parser.commits_statistics
-      parser.contributors_statistics
-    end
-
     client = Githuber.new(:monthly)
     parser = RepoParser.new(client.query, client.repos, 'weekly', :contributors_count)
 

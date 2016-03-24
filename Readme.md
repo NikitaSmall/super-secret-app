@@ -1,33 +1,26 @@
 # githuber
 Back-end junior uawebchallenge work.
+Find a woking copy at the Heroku: https://githuber-uawebchallenge.herokuapp.com/
+(sorry for slow work: free dyno)
 
 ## Technologies
 1. Ruby as a language, Sinatra as a simple DSL for website tasks.
 2. Mongo as a database, Mongoid as an adapter.
 3. Rspec for tests, VSR to cache web requests during testing.
+4. Heroku's scheduler extension used for daily caching system.
 
 ## About caching
-Any request result will be saved to database at first attempt.
+Any request result will be saved to database at first attempt to get it,
+but usualy all the data updates at the midnight by scheduler.
 To save it to database you need to interact with this site usual way.
-I didn't create any scheduled works due they are useless with Heroku free account
-(but it is good solution for caching our data anyway): application will go asleep
-after thirty minutes of idle and nothing will be done. So, where you will make first
-request, please, wait a little bit for slow free Heroku app will done all the work.
-There is four different requests that can be performed each day,
-but only three will be different:
-- Apps created last week / apps' activity for last week
-- Apps created last week / apps' activity for last month (result will be the same as first one, this state is checked)
-- Apps created last month / apps' activity for last week
-- Apps created last month / apps' activity for last month
 
-### Personal comment
-This task shows perfectly typical N+1 query problem to external API with huge side computing.
-I may be wrong but I think that such kinds of clever/tricky tasks fits perfectly
-when we can design our API. Anyway, the task is comlete.
+## Code review guide
+1. To see routes and web app itself see `routes` folder and `application.rb` file.
+2. Spec files placed in (obviously) `spec` folder. VCR cassettes prevent external requests to run and stored at `vcr_cassettes` folder.
+3. The main classes are placed in `lib` folder. Here you can find classes that interact with github api, that parse requests and so on.
+4. View and static files can be found in `views` and `public` folders.
+5. Tasks for scheduler can be found in `Rakefile`
 
-I made a research and communicated with github support. Here is their answer:
-
-'There's no equivalent in the API for the data shown on the Trending page.
-Also, the trending page shows only stars, not commits or contributors, as you mentioned.
-To answer your question -- no, there's no simple way to collect this data via the API
-in a small number of requests. You might need to make several requests per number per repository.'
+### To run this app locally you need to make two things:
+1. Create `.env` file with `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` and `MONGOID_ENV` environment variables.
+2. In `db` folder create and place `mongoid.yml` file (you may use `example.yml` as start point).

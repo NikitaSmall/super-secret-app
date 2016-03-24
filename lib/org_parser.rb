@@ -1,9 +1,6 @@
 require 'date'
 require 'json'
 
-require_relative 'github_api.rb'
-require_relative 'parser_helper.rb'
-
 class OrgParser
   attr_reader :mode
 

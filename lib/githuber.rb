@@ -1,5 +1,4 @@
 require 'date'
-require_relative 'github_api.rb'
 
 class Githuber
   attr_reader :mode
